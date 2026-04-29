@@ -2,8 +2,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: ocp-bootstrap-region01
-  namespace: {{ .Values.argocd.applicationset.bootstrap.namespace }}
+  name: ocp-bootstrap-platform
+  namespace: {{ .Values.argocd.applicationset.bootstrap.platform.namespace }}
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -11,10 +11,10 @@ spec:
   - matrix:
       generators:
         - git:
-            repoURL: {{ .Values.argocd.applicationset.bootstrap.git.repoURL }}
-            revision: {{ .Values.argocd.applicationset.bootstrap.git.targetRevision }}
+            repoURL: {{ .Values.argocd.applicationset.bootstrap.platform.git.repoURL }}
+            revision: {{ .Values.argocd.applicationset.bootstrap.platform.git.targetRevision }}
             directories:
-            - path: {{ .Values.argocd.applicationset.bootstrap.git.path }}
+            - path: {{ .Values.argocd.applicationset.bootstrap.platform.git.path }}
         - clusters:    
 {{- with .Values.argocd.clusters.region01.selector }} 
             selector:
@@ -24,10 +24,10 @@ spec:
     metadata:
       name: {{ printf "{{ (split \":\" .name)._0 }}-{{index .path.segments 2}}" | quote }}
     spec:
-      project: {{ .Values.argocd.applicationset.bootstrap.project }}
+      project: {{ .Values.argocd.applicationset.bootstrap.platform.project }}
       source:
-        repoURL: {{ .Values.argocd.applicationset.bootstrap.git.repoURL }}
-        targetRevision: {{ .Values.argocd.applicationset.bootstrap.git.targetRevision }}
+        repoURL: {{ .Values.argocd.applicationset.bootstrap.platform.git.repoURL }}
+        targetRevision: {{ .Values.argocd.applicationset.bootstrap.platform.git.targetRevision }}
         path: {{ printf "{{.path.path}}" | quote }}
         helm:
           valueFiles:
@@ -35,23 +35,6 @@ spec:
       destination:
         server: {{ printf "{{.server}}" | quote }}
         namespace: {{ printf "{{index .path.segments 2}}" | quote }}
-{{- if and .path (eq .path.path "argocd/ocp-bootstrap/tenants") }}
-      syncPolicy:
-        syncOptions:
-        - CreateNamespace=false
-        managedNamespaceMetadata:
-          annotations:
-            openshift.io/cluster-monitoring: "true"
-        automated: 
-          prune: true
-          selfHeal: true
-        retry:
-          limit: 5 
-          backoff:
-            duration: 5s 
-            factor: 2 
-            maxDuration: 3m 
-{{- else }}
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
@@ -67,5 +50,4 @@ spec:
             duration: 5s 
             factor: 2 
             maxDuration: 3m 
-{{- end }}
 {{ end -}}

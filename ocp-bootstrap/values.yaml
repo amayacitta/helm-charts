@@ -17,10 +17,18 @@ argocd:
           region: "region02"
   applicationset:
     bootstrap:
-      namespace: openshift-gitops
-      project: default
-      git:
-        repoURL: https://github.com/amayacitta/ocp-lab.git
-        path: argocd/ocp-bootstrap/*
-        targetRevision: HEAD
-      # syncPolicy configuration for the ApplicationSet template, applied to all generated Applications
+      platform:
+        namespace: openshift-gitops
+        project: default
+        git:
+          repoURL: https://github.com/amayacitta/ocp-lab.git
+          path: argocd/ocp-bootstrap/*
+          targetRevision: HEAD
+      tenants:
+        namespace: openshift-gitops
+        project: default
+        git:
+          repoURL: https://github.com/amayacitta/ocp-lab.git
+          path: argocd/ocp-bootstrap/tenants/*
+          targetRevision: HEAD
+
