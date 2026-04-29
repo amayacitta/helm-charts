@@ -35,8 +35,37 @@ spec:
       destination:
         server: {{ printf "{{.server}}" | quote }}
         namespace: {{ printf "{{index .path.segments 2}}" | quote }}
-{{- with .Values.argocd.applicationset.bootstrap.syncPolicy }}
+{{- if and .path (hasPrefix "argocd/ocp-bootstrap/tenant" .path.path) }}
       syncPolicy:
-{{ toYaml . | indent 8 -}}
-{{ end }}
-{{ end }}
+        syncOptions:
+        - CreateNamespace=false
+        managedNamespaceMetadata:
+          annotations:
+            openshift.io/cluster-monitoring: "true"
+        automated: 
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5 
+          backoff:
+            duration: 5s 
+            factor: 2 
+            maxDuration: 3m 
+{{- else }}
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        managedNamespaceMetadata:
+          annotations:
+            openshift.io/cluster-monitoring: "true"
+        automated: 
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5 
+          backoff:
+            duration: 5s 
+            factor: 2 
+            maxDuration: 3m 
+{{- end }}
+{{ end -}}

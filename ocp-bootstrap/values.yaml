@@ -24,22 +24,3 @@ argocd:
         path: argocd/ocp-bootstrap/*
         targetRevision: HEAD
       # syncPolicy configuration for the ApplicationSet template, applied to all generated Applications
-      syncPolicy:
-        syncOptions:
-        - CreateNamespace=true
-        annotations:
-          openshift.io/cluster-monitoring: "true"
-        automated: 
-          prune: true
-          selfHeal: true
-        # add pss baseline labels to the namespaces created by this ApplicationSet
-        # managedNamespaceMetadata:
-        #   labels:
-        #     pod-security.kubernetes.io/enforce: baseline
-        # enable retry logic for application syncs
-        retry:
-          limit: 5 
-          backoff:
-            duration: 5s 
-            factor: 2 
-            maxDuration: 3m 
