@@ -35,7 +35,7 @@ spec:
       destination:
         server: {{ printf "{{.server}}" | quote }}
         namespace: {{ printf "{{index .path.segments 2}}" | quote }}
-{{- if and .path (hasPrefix "argocd/ocp-bootstrap/tenant" .path.path) }}
+{{- if and .path (eq .path.path "argocd/ocp-bootstrap/tenants") }}
       syncPolicy:
         syncOptions:
         - CreateNamespace=false
