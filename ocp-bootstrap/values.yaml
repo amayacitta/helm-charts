@@ -29,6 +29,6 @@ argocd:
         project: default
         git:
           repoURL: https://github.com/amayacitta/ocp-lab.git
-          path: argocd/ocp-bootstrap/tenants
+          path: argocd/ocp-tenants
           targetRevision: HEAD
 
