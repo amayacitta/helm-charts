@@ -1,0 +1,34 @@
+argocd:
+  enabled: true
+  clusters:
+    region01:
+      enabled: true
+      helmValuesFile: values-region01.yaml
+      selector:
+        matchLabels:
+          type: "workload"     
+          region: "region01"
+    region02:
+      enabled: false
+      helmValuesFile: values-region02.yaml
+      selector:
+        matchLabels:
+          type: "workload"     
+          region: "region02"
+  applicationset:
+    bootstrap:
+      platform:
+        namespace: openshift-gitops
+        project: cc-demos
+        git:
+          repoURL: https://github.com/amayacitta/okd-demo-mgmt.git
+          path: argocd/okd-bootstrap/*
+          targetRevision: HEAD
+      apps:
+        namespace: openshift-gitops
+        project: cc-demos
+        git:
+          repoURL: https://github.com/amayacitta/okd-demo-mgmt.git
+          path: argocd/okd-apps
+          targetRevision: HEAD
+
