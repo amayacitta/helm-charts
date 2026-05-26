@@ -32,12 +32,13 @@ spec:
         helm:
           valueFiles:
             - {{ .Values.argocd.clusters.region02.helmValuesFile }}
+          releaseName: {{ printf "{{index .path.segments 2}}" | quote }}
       destination:
         server: {{ printf "{{.server}}" | quote }}
         namespace: {{ printf "{{index .path.segments 2}}" | quote }}
       syncPolicy:
         syncOptions:
-        - CreateNamespace=false
+        - CreateNamespace=true
         managedNamespaceMetadata:
           annotations:
             openshift.io/cluster-monitoring: "true"

@@ -32,6 +32,7 @@ spec:
         helm:
           valueFiles:
             - {{ .Values.argocd.clusters.region01.helmValuesFile }}
+          releaseName: {{ printf "{{index .path.segments 2}}" | quote }}
       destination:
         server: {{ printf "{{.server}}" | quote }}
         namespace: {{ printf "{{index .path.segments 1}}" | quote }}
