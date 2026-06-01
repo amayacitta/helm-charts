@@ -29,6 +29,6 @@ argocd:
         project: cc-demos
         git:
           repoURL: https://github.com/amayacitta/okd-demo-mgmt.git
-          path: argocd/okd-apps
+          path: argocd/okd-apps/*
           targetRevision: HEAD
 

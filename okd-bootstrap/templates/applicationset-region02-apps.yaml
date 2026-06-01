@@ -22,7 +22,7 @@ spec:
 {{ end }}             
   template:      
     metadata:
-      name: {{ printf "{{ (split \":\" .name)._0 }}-{{index .path.segments 1}}" | quote }}
+      name: {{ printf "{{ (split \":\" .name)._0 }}-{{index .path.segments 2}}" | quote }}
     spec:
       project: {{ .Values.argocd.applicationset.bootstrap.apps.project }}
       source:
@@ -35,7 +35,7 @@ spec:
           releaseName: {{ printf "{{index .path.segments 2}}" | quote }}
       destination:
         server: {{ printf "{{.server}}" | quote }}
-        namespace: {{ printf "{{index .path.segments 1}}" | quote }}
+        namespace: {{ printf "{{index .path.segments 2}}" | quote }}
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
